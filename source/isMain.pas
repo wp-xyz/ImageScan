@@ -64,6 +64,7 @@ type
     procedure AcFileOpenExecute(Sender: TObject);
     procedure AcFileQuitExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure ImageMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure ImagePaint(Sender: TObject);
     procedure ImageResize(Sender: TObject);
@@ -125,6 +126,12 @@ begin
   Statusbar.Panels[0].Width := Statusbar.Height;
 //  paintbox1.Parent := Statusbar;
 //  paintbox1.Top := 0;
+end;
+
+procedure TMainForm.FormDropFiles(Sender: TObject;
+  const FileNames: array of String);
+begin
+  LoadFile(FileNames[0]);
 end;
 
 procedure TMainForm.CalcScan(APosition:Integer; ADirection:TScanDirection);

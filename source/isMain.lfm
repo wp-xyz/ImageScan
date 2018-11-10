@@ -3,11 +3,13 @@ object MainForm: TMainForm
   Height = 579
   Top = 151
   Width = 673
+  AllowDropFiles = True
   Caption = 'ImageScan'
   ClientHeight = 559
   ClientWidth = 673
   Menu = MainMenu1
   OnCreate = FormCreate
+  OnDropFiles = FormDropFiles
   LCLVersion = '2.1.0.0'
   object ToolBar: TToolBar
     Left = 0
