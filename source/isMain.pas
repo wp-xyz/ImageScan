@@ -63,6 +63,7 @@ type
     procedure AcCrosshairExecute(Sender: TObject);
     procedure AcFileOpenExecute(Sender: TObject);
     procedure AcFileQuitExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure ImageMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -82,6 +83,10 @@ type
     procedure LoadFile(const AFileName: String);
     function XToBmp(X, WBmp, HBmp: Integer): Integer;
     function YToBmp(Y, WBmp, HBmp: Integer): Integer;
+
+    function CalcIniName: String;
+    procedure LoadFromIni;
+    procedure SaveToIni;
   public
     { public declarations }
   end;
@@ -94,7 +99,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLIntf, GraphUtil, fpimage, intfgraphics;
+  LCLIntf, GraphUtil, IniFiles, fpimage, intfgraphics;
 
 
 { TMainForm }
@@ -119,19 +124,9 @@ begin
   Close;
 end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+function TMainForm.CalcIniName: String;
 begin
-  MRUMenuManager.IniFileName := ChangeFileExt(Application.ExeName, '.ini');
-  FMouseColor := clNone;
-  Statusbar.Panels[0].Width := Statusbar.Height;
-//  paintbox1.Parent := Statusbar;
-//  paintbox1.Top := 0;
-end;
-
-procedure TMainForm.FormDropFiles(Sender: TObject;
-  const FileNames: array of String);
-begin
-  LoadFile(FileNames[0]);
+  Result := ChangeFileExt(Application.ExeName, '.ini');
 end;
 
 procedure TMainForm.CalcScan(APosition:Integer; ADirection:TScanDirection);
@@ -217,6 +212,31 @@ begin
   end;
 end;
 
+procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if CanClose then
+    try
+      SaveToIni;
+    except
+    end;
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  MRUMenuManager.IniFileName := calcIniName;
+  FMouseColor := clNone;
+  Statusbar.Panels[0].Width := Statusbar.Height;
+  LoadFromIni;
+//  paintbox1.Parent := Statusbar;
+//  paintbox1.Top := 0;
+end;
+
+procedure TMainForm.FormDropFiles(Sender: TObject;
+  const FileNames: array of String);
+begin
+  LoadFile(FileNames[0]);
+end;
+
 procedure TMainForm.ImageMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 var
@@ -268,6 +288,29 @@ begin
   TrackbarVert.Max := Image.Width - 1;
 end;
 
+procedure TMainForm.LoadFromIni;
+var
+  ini: TMemIniFile;
+  L, T, W, H: Integer;
+  Rect: TRect;
+begin
+  ini := TMemIniFile.Create(CalcIniName);
+  try
+    L := ini.ReadInteger('MainForm', 'Left', Left);
+    T := ini.ReadInteger('MainForm', 'Top', Top);
+    W := ini.ReadInteger('MainForm', 'Width', Width);
+    H := ini.ReadInteger('MainForm', 'Height', Height);
+    Rect := Screen.WorkAreaRect;
+    if L < Rect.Left then L := Rect.Left;
+    if L + Width > Rect.Right then L := Rect.Right - W;
+    if T < Rect.Top then T := Rect.Top;
+    if T + Height > Rect.Bottom then T := Rect.Bottom - H;
+    SetBounds(L, T, W, H);
+  finally
+    ini.Free;
+  end;
+end;
+
 procedure TMainForm.MRUMenuManagerRecentFile(Sender: TObject;
   const AFileName: String);
 begin
@@ -310,6 +353,21 @@ begin
   CalcScan(TrackBarHoriz.Position, sdHoriz);
   CalcScan(TrackbarVert.Position, sdVert);
   Image.Invalidate;
+end;
+
+procedure TMainForm.SaveToIni;
+var
+  ini: TCustomIniFile;
+begin
+  ini := TMemIniFile.Create(CalcIniName);
+  try
+    ini.WriteInteger('MainForm', 'Left', Left);
+    ini.WriteInteger('MainForm', 'Top', Top);
+    ini.WriteInteger('MainForm', 'Width', Width);
+    ini.WriteInteger('MainForm', 'Height', Height);
+  finally
+    ini.Free;
+  end;
 end;
 
 procedure TMainForm.StatusBarDrawPanel(AStatusBar: TStatusBar;

@@ -8,6 +8,7 @@ object MainForm: TMainForm
   ClientHeight = 559
   ClientWidth = 673
   Menu = MainMenu1
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   LCLVersion = '2.1.0.0'
