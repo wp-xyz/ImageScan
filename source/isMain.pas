@@ -5,7 +5,7 @@ unit isMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, TAGraph, TASeries, TASources, mrumanager, Forms,
+  Classes, SysUtils, TAGraph, TASeries, TASources, mrumanager, Forms,
   Controls, Graphics, Dialogs, Menus, ActnList, ExtCtrls, ComCtrls, ExtDlgs;
 
 type
@@ -157,6 +157,14 @@ procedure TMainForm.CalcScan(APosition:Integer; ADirection:TScanDirection);
     end;
   end;
 
+  function GetLineColor: TColor;
+  begin
+    if AcRed.Checked then Result := clRed
+    else if AcGreen.Checked then Result := clGreen
+    else if AcBlue.Checked then Result := clBlue
+    else Result := clBlack;
+  end;
+
 var
   fpclr: TFPColor;
   i, x, y: Integer;
@@ -183,6 +191,7 @@ begin
               val := GetColorComponent(fpclr);
               ChartHorizLineseries.AddXY(x, val);
             end;
+            ChartHorizLineSeries.SeriesColor := GetLineColor;
           finally
             ChartHorizLineSeries.EndUpdate;
           end;
@@ -202,6 +211,7 @@ begin
               val := GetColorComponent(fpclr);
               ChartVertLineSeries.AddXY(y, val);
             end;
+            ChartVertLineSeries.SeriesColor := GetLineColor;
           finally
             ChartVertLineSeries.EndUpdate;
           end;
