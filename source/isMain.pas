@@ -39,7 +39,6 @@ type
     muRecentlyUsed: TMenuItem;
     MenuItem4: TMenuItem;
     mnuQiot: TMenuItem;
-    MRUMenuManager: TMRUMenuManager;
     OpenPictureDialog: TOpenPictureDialog;
     PaintBox1: TPaintBox;
     RecentFilesPopup: TPopupMenu;
@@ -79,6 +78,7 @@ type
   private
     { private declarations }
     FMouseColor: TColor;
+    MRUMenuManager: TMRUMenuManager;
     procedure CalcScan(APosition: Integer; ADirection: TScanDirection);
     procedure LoadFile(const AFileName: String);
     function XToBmp(X, WBmp, HBmp: Integer): Integer;
@@ -233,7 +233,14 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  MRUMenuManager := TMRUMenuManager.Create(self);
+  MRUMenuManager.MenuItem := muRecentlyUsed;
+  MRUMenuManager.PopupMenu := RecentFilesPopup;
   MRUMenuManager.IniFileName := calcIniName;
+  MRUMenuManager.IniSection := 'Recent';
+  MRUMenuManager.MenuCaptionMask := '&%x - %1:s';
+  MRUMenuManager.OnRecentFile := @MRUMenuManagerRecentFile;
+
   FMouseColor := clNone;
   Statusbar.Panels[0].Width := Statusbar.Height;
   LoadFromIni;

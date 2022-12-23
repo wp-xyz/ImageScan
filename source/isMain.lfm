@@ -5,13 +5,13 @@ object MainForm: TMainForm
   Width = 673
   AllowDropFiles = True
   Caption = 'ImageScan'
-  ClientHeight = 559
+  ClientHeight = 579
   ClientWidth = 673
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
-  LCLVersion = '2.1.0.0'
+  LCLVersion = '2.3.0.0'
   object ToolBar: TToolBar
     Left = 0
     Height = 42
@@ -104,7 +104,7 @@ object MainForm: TMainForm
   object StatusBar: TStatusBar
     Left = 0
     Height = 23
-    Top = 536
+    Top = 556
     Width = 673
     Panels = <    
       item
@@ -128,7 +128,7 @@ object MainForm: TMainForm
     AnchorSideRight.Control = TrackBarHoriz
     AnchorSideBottom.Control = TrackbarVert
     Left = 161
-    Height = 304
+    Height = 324
     Top = 188
     Width = 470
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -153,7 +153,7 @@ object MainForm: TMainForm
     AnchorSideBottom.Control = TrackbarVert
     AnchorSideBottom.Side = asrBottom
     Left = 647
-    Height = 328
+    Height = 348
     Top = 176
     Width = 26
     OnChange = TrackBarHorizChange
@@ -174,7 +174,7 @@ object MainForm: TMainForm
     AnchorSideBottom.Control = TrackbarVert
     AnchorSideBottom.Side = asrBottom
     Left = 12
-    Height = 331
+    Height = 351
     Top = 184
     Width = 133
     AxisList = <    
@@ -226,7 +226,7 @@ object MainForm: TMainForm
     AnchorSideBottom.Control = StatusBar
     Left = 152
     Height = 32
-    Top = 504
+    Top = 524
     Width = 487
     OnChange = TrackbarVertChange
     Position = 0
@@ -287,7 +287,7 @@ object MainForm: TMainForm
     AnchorSideTop.Control = StatusBar
     Left = 4
     Height = 16
-    Top = 540
+    Top = 560
     Width = 16
     BorderSpacing.Left = 4
     BorderSpacing.Top = 4
@@ -509,15 +509,6 @@ object MainForm: TMainForm
     )
     Left = 248
     Top = 296
-  end
-  object MRUMenuManager: TMRUMenuManager
-    MenuItem = muRecentlyUsed
-    PopupMenu = RecentFilesPopup
-    IniSection = 'Recent'
-    MenuCaptionMask = '&%x - %1:s'
-    OnRecentFile = MRUMenuManagerRecentFile
-    Left = 448
-    Top = 256
   end
   object RecentFilesPopup: TPopupMenu
     Left = 448
