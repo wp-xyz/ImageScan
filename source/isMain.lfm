@@ -8,10 +8,11 @@ object MainForm: TMainForm
   ClientHeight = 579
   ClientWidth = 673
   Menu = MainMenu1
+  OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
-  LCLVersion = '2.3.0.0'
+  LCLVersion = '3.99.0.0'
   object ToolBar: TToolBar
     Left = 0
     Height = 42
@@ -305,6 +306,7 @@ object MainForm: TMainForm
     Shape = bsSpacer
   end
   object ImageList: TImageList
+    Scaled = True
     Left = 344
     Top = 408
     Bitmap = {

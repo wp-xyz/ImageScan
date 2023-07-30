@@ -62,6 +62,7 @@ type
     procedure AcCrosshairExecute(Sender: TObject);
     procedure AcFileOpenExecute(Sender: TObject);
     procedure AcFileQuitExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
@@ -78,6 +79,7 @@ type
   private
     { private declarations }
     FMouseColor: TColor;
+    FActivated: Boolean;
     MRUMenuManager: TMRUMenuManager;
     procedure CalcScan(APosition: Integer; ADirection: TScanDirection);
     procedure LoadFile(const AFileName: String);
@@ -222,6 +224,15 @@ begin
   end;
 end;
 
+procedure TMainForm.FormActivate(Sender: TObject);
+begin
+  if not FActivated then
+  begin
+    FActivated := true;
+    LoadFromIni;
+  end;
+end;
+
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   if CanClose then
@@ -243,9 +254,6 @@ begin
 
   FMouseColor := clNone;
   Statusbar.Panels[0].Width := Statusbar.Height;
-  LoadFromIni;
-//  paintbox1.Parent := Statusbar;
-//  paintbox1.Top := 0;
 end;
 
 procedure TMainForm.FormDropFiles(Sender: TObject;
